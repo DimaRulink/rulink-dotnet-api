@@ -164,3 +164,4 @@ Swagger API: [https://rulink.io/api/v2/crypto/swagger](https://rulink.io/api/v2/
 	"traceId": "d2b28388"
 }
 ```
+
