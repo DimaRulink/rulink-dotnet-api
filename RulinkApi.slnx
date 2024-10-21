@@ -1,0 +1,6 @@
+﻿<Solution>
+  <Project Path="src\RulinkApi.CryptoService\RulinkApi.CryptoService.csproj" Type="Classic C#" />
+  <Project Path="src\RulinkApi.HttpClient\RulinkApi.HttpClient.csproj" Type="Classic C#" />
+  <Project Path="src\RulinkApi.Models\RulinkApi.Models.csproj" Type="Classic C#" />
+  <Project Path="test\RulinkApi.Test\RulinkApi.Test.csproj" Type="Classic C#" />
+</Solution>
