@@ -25,8 +25,8 @@ public class UnitTestCryptoService
     {
         var VerificationRequest = new SignatureVerificationRequest
         {
-            Data = File.ReadAllBytes("data\\2-683.pdf"),
-            Signature= File.ReadAllBytes("data\\2-683.pdf.sig"),
+            Data = File.ReadAllBytes("data\\datafile.pdf"),
+            Signature= File.ReadAllBytes("data\\datafile.pdf.sig"),
         };
         
         var result = _cryptoServiceClient.VerifySignature(VerificationRequest, "test");
@@ -38,7 +38,7 @@ public class UnitTestCryptoService
     {
         var mergeTwoSigFilesRequest = new SignatureMergeRequest()
         {
-            Signature= File.ReadAllBytes("data\\2-683.pdf.sig"),
+            Signature= File.ReadAllBytes("data\\datafile.pdf.sig"),
             SecondSignature = File.ReadAllBytes("data\\signatureFile2.sig")
         };
         
