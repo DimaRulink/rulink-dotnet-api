@@ -6,12 +6,12 @@ public class CertificateAuthorityInfo
     /// Название удостоверяющего центра
     /// </summary>
     /// <example>Федеральная Налоговая Служба</example>
-    public string Title { get; set; }
+    public string? Title { get; set; }
     /// <summary>
     /// Ссылка на сайт удостоверяющего центра
     /// </summary>
     /// <example>https://www.nalog.ru/rn77/about_fts/uc_fns/</example>
-    public string Url { get; set; }
+    public string? Url { get; set; }
     /// <summary>
     /// Аккредитованный УЦ (УКЭП)
     /// </summary>
@@ -26,7 +26,7 @@ public class CertificateAuthorityInfo
     /// Текущий статус УЦ
     /// </summary>
     /// <example>Действует</example>
-    public string Status { get; set; }
+    public string? Status { get; set; }
     /// <summary>
     /// Дата последнего обновления статуса
     /// </summary>
@@ -36,12 +36,12 @@ public class CertificateAuthorityInfo
     /// ОГРН удостоверяющего центра
     /// </summary>
     /// <example>1027700071530</example>
-    public string OgrnCode { get; set; }
+    public string? OgrnCode { get; set; }
     /// <summary>
     /// Email удостоверяющего центра
     /// </summary>
     /// <example>uc@nalog.ru</example>
-    public string Email { get; set; }
+    public string? Email { get; set; }
     
     public override string ToString()
     {

@@ -11,6 +11,11 @@ namespace RulinkApi.CryptoService.Interfaces;
 public interface ICryptoServiceClient
 {
     /// <summary>
+    /// Установка APIKEY
+    /// </summary>
+    /// <param name="apikey"></param>
+    public void SetApikey(string apikey);
+    /// <summary>
     /// Проверка доступности сервиса
     /// </summary>
     /// <param name="cancellationToken"></param>

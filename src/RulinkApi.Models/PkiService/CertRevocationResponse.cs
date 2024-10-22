@@ -4,9 +4,11 @@ namespace RulinkApi.Models.PkiService;
 
 public class CertRevocationResponse : GeneralResponse
 {
-    public CertificateRevocationInfo RevocationInfo { get; set; }
+    public CertificateRevocationInfo? RevocationInfo { get; set; }
 
-    public CertRevocationResponse(){}
+    public CertRevocationResponse(): base(false, string.Empty, string.Empty)
+    {
+    }
     
     public CertRevocationResponse(bool success, string message, string traceid, CertificateRevocationInfo certRevocInfo) : base(success, message, traceid)
     {
@@ -14,10 +16,11 @@ public class CertRevocationResponse : GeneralResponse
     }
     
     public CertRevocationResponse(bool success, string message, string traceid) : base(success, message, traceid)
-    { 
+    {
+        RevocationInfo = null;
     }
     
-    public static CertRevocationResponse FromJson(string json)
+    public new static CertRevocationResponse FromJson(string json)
     {
         return JsonSerializer.Deserialize<CertRevocationResponse>(json, new JsonSerializerOptions() {PropertyNameCaseInsensitive = true}) ?? 
                new CertRevocationResponse(false, $"Ошибка десериализации. Json: {json}", "");

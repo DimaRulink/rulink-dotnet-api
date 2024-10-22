@@ -2,29 +2,25 @@
 
 namespace RulinkApi.Models;
 
-public class GeneralResponse
+public class GeneralResponse(bool isSuccess, string message, string traceId)
 {
     /// <summary>
     /// Общий результат выполнения запроса
     /// </summary>
-    public bool IsSuccess { get; set; }
+    public bool IsSuccess { get; set; } = isSuccess;
+
     /// <summary>
     /// Сообщение о результате выполнения запроса/Ошибка выполнения
     /// </summary>
-    public string Message { get; set; }
+    public string Message { get; set; } = message;
+
     /// <summary>
     /// TraceId запроса
     /// </summary>
-    public string TraceId { get; set; }
+    public string TraceId { get; set; } = traceId;
 
     public GeneralResponse(): this(false, string.Empty, string.Empty)
     {
-    }
-    public GeneralResponse(bool isSuccess, string message, string traceId)
-    {
-        this.IsSuccess = isSuccess;
-        this.Message = message;
-        this.TraceId = traceId;
     }
 
     public override string ToString()

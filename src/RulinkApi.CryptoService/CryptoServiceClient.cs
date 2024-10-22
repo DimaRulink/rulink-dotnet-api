@@ -20,10 +20,10 @@ public class CryptoServiceClient : ICryptoServiceClient
         Apikey = string.Empty;
     }
     
-    public CryptoServiceClient(string baseUrl, string apikey)
+    public CryptoServiceClient(string baseUrl, string? apikey)
     {
         BaseUrl = baseUrl;
-        Apikey = apikey;
+        Apikey = !string.IsNullOrEmpty(apikey) ? apikey : string.Empty;
     }
     
     public void SetApikey(string apikey)
@@ -34,7 +34,8 @@ public class CryptoServiceClient : ICryptoServiceClient
     public async Task<GeneralResponse> Ping(CancellationToken cancellationToken)
     {
         var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/ping");
+        //var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/ping");
+        var uri = new Uri(baseUri, baseUri.LocalPath.UrlCombine("/cms/ping"));
         var headers = new Dictionary<string, string>
         {
             {"Authorization", $"Apikey {Apikey}"}

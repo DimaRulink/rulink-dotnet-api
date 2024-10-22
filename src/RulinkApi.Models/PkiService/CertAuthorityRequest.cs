@@ -8,12 +8,12 @@ public class CertAuthorityRequest
     /// ОГРН удостоверяющего центра, выдавшего сертификат (для КЭП)
     /// </summary>
     /// <example>1027700071530</example>
-    public string Ogrn { get; set; }
+    public string? Ogrn { get; set; }
     /// <summary>
     /// Название издателя сертификата (для УНЭП)
     /// </summary>
     /// <example>Госуслуги. Неквалифицированная электронная подпись</example>
-    public string IssuerCn { get; set; }
+    public string? IssuerCn { get; set; }
 
     public override string ToString()
     {
@@ -22,6 +22,11 @@ public class CertAuthorityRequest
     
     public static CertAuthorityRequest FromJson(string json)
     {
-        return JsonSerializer.Deserialize<CertAuthorityRequest>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        return JsonSerializer.Deserialize<CertAuthorityRequest>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? 
+               new CertAuthorityRequest()
+               {
+                     Ogrn = string.Empty,
+                     IssuerCn = string.Empty,
+               };
     }
 }

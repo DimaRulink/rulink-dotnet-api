@@ -37,8 +37,8 @@ public class SignatureDetails
         if (this.CaDetails?.IsAccredited == false)
         {
             if (this.CaDetails?.IsTrusted == true)
-                return new KeyValuePair<bool, string>(false, $"Подпись соответствует данным. Удостоверяющий центр не имеет действующей аккредитации, но некоторые организации ему доверяют. УЦ: {this.CaDetails.Title} Статус: {this.CaDetails.Status} Ссылка: {this.CaDetails.Url}");
-            return new KeyValuePair<bool, string>(false, $"Подпись соответствует данным, но удостоверяющий центр не имеет действующей аккредитации. УЦ: {this.CaDetails.Title} Статус: {this.CaDetails.Status}");
+                return new KeyValuePair<bool, string>(false, $"Подпись соответствует данным. Удостоверяющий центр не имеет действующей аккредитации, но некоторые организации ему доверяют. УЦ: {CaDetails?.Title} Статус: {CaDetails?.Status} Ссылка: {CaDetails?.Url}");
+            return new KeyValuePair<bool, string>(false, $"Подпись соответствует данным, но удостоверяющий центр не имеет действующей аккредитации. УЦ: {CaDetails?.Title} Статус: {CaDetails?.Status}");
         }
         return new KeyValuePair<bool, string>(true, $"Подпись действующая");
     }

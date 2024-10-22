@@ -10,9 +10,9 @@ namespace RulinkApi.Models.CryptoService;
 /// <param name="signatures"></param>
 /// <param name="dataFileLen"></param>
 /// <param name="sigFileLen"></param>
-public class SignatureVerificationResult (bool isFileVerificationSuccess, SignatureDetails[] signatures, long dataFileLen, long sigFileLen)
+public class SignatureVerificationResult (SignatureDetails[] signatures, long dataFileLen, long sigFileLen)
 {
-    public SignatureVerificationResult() : this(false, [], 0, 0)
+    public SignatureVerificationResult() : this([], 0, 0)
     {
     }
     
@@ -24,9 +24,9 @@ public class SignatureVerificationResult (bool isFileVerificationSuccess, Signat
         {
             if (Signatures.Length == 0)
                 return false;
-            return Signatures.Any(s => s.IsFileMatch || 
-                                       s.IsValidNow || 
-                                       s.RevocatedDetails?.IsRevocated != true || 
+            return Signatures.Any(s => s?.IsFileMatch == true || 
+                                       s?.IsValidNow == true || 
+                                       s?.RevocatedDetails?.IsRevocated != true || 
                                        s.CaDetails?.IsAccredited == true);
         }}
 

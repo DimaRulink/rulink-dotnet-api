@@ -22,7 +22,7 @@ public class SignatureVerificationResponse: GeneralResponse
         return JsonSerializer.Serialize(this);
     }
     
-    public static SignatureVerificationResponse FromJson(string data)
+    public new static SignatureVerificationResponse  FromJson(string data)
     {
         return JsonSerializer.Deserialize<SignatureVerificationResponse>(data, new JsonSerializerOptions(){ PropertyNameCaseInsensitive = true }) ?? 
                new SignatureVerificationResponse(false, $"Ошибка десериализации. Json: {data}", "", null);
