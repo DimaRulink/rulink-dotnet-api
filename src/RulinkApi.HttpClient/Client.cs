@@ -215,4 +215,13 @@ public static class Client
         var response = await client.GetAsync(url, cancellationToken);
         return await response.Content.ReadAsByteArrayAsync(cancellationToken);
     }
+    
+    public static string UrlCombine(string url, string path)
+    {
+        if (string.IsNullOrEmpty(url))
+            return path;
+        if (string.IsNullOrEmpty(path))
+            return url;
+        return $"{url.TrimEnd('/')}/{path.TrimStart('/')}";
+    }
 }

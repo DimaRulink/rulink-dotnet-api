@@ -35,7 +35,7 @@ public class CryptoServiceClient : ICryptoServiceClient
     {
         var baseUri = new Uri(BaseUrl, UriKind.Absolute);
         //var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/ping");
-        var uri = new Uri(baseUri, baseUri.LocalPath.UrlCombine("/cms/ping"));
+        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/cms/ping"));
         var headers = new Dictionary<string, string>
         {
             {"Authorization", $"Apikey {Apikey}"}
@@ -47,7 +47,8 @@ public class CryptoServiceClient : ICryptoServiceClient
     public async Task<SignatureVerificationResponse> VerifySignatureAsync(SignatureVerificationRequest verificationRequest, string? traceid, CancellationToken cancellationToken)
     {
         var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/signature/validation");
+        //var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/signature/validation");
+        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/cms/signature/validation"));
         var headers = new Dictionary<string, string>
         {
             {"Authorization", $"Apikey {Apikey}"}
@@ -66,7 +67,8 @@ public class CryptoServiceClient : ICryptoServiceClient
     public async Task<SignatureUpdateResponse> MergeSignaturesAsync(SignatureMergeRequest signatureUpdateRequest, string? traceid, CancellationToken cancellationToken)
     {
         var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/signature/merge");
+        //var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/signature/merge");
+        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/cms/signature/merge"));
         var headers = new Dictionary<string, string>
         {
             {"Authorization", $"Apikey {Apikey}"}
@@ -85,7 +87,8 @@ public class CryptoServiceClient : ICryptoServiceClient
     public async Task<SignatureUpdateResponse> ExcludeSignersAsync(SignatureExcludeRequest signatureExcludeRequest, string? traceid, CancellationToken cancellationToken)
     {
         var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/signature/exclude");
+        //var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/signature/exclude");
+        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/cms/signature/exclude"));
         var headers = new Dictionary<string, string>
         {
             {"Authorization", $"Apikey {Apikey}"}
