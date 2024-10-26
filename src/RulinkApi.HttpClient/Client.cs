@@ -127,6 +127,28 @@ public static class Client
         return await response.Content.ReadAsStringAsync(cancellationToken);
     }
     
+    /// <summary>
+    /// Запрос DELETE API
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="headers"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<string> DeleteAsync(Uri url, IDictionary<string,string> headers, CancellationToken cancellationToken)
+    {
+        var clientHandler = new HttpClientHandler();
+        clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+        using var client = new System.Net.Http.HttpClient(clientHandler);
+        foreach (var onekey in headers.Keys)
+        {
+            client.DefaultRequestHeaders.Add(onekey, headers[onekey]);
+        }
+        var response = await client.DeleteAsync(url, cancellationToken);
+        return await response.Content.ReadAsStringAsync(cancellationToken);
+    }
+    
+    
+    
     
     
     

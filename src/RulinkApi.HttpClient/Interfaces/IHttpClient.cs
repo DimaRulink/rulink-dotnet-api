@@ -39,6 +39,16 @@ public interface IHttpClient
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public Task<string> PutAsync(Uri url, string apikey, string? content, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Отправка DELETE запроса 
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="apikey"></param>
+    /// <param name="content"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<string> DeleteAsync(Uri url, string apikey, CancellationToken cancellationToken);
 
     /// <summary>
     /// Загрузка файла через API

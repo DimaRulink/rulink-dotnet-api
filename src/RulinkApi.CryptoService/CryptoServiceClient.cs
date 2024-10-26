@@ -2,6 +2,7 @@
 using RulinkApi.CryptoService.Interfaces;
 using RulinkApi.Models;
 using RulinkApi.Models.CryptoService;
+using RulinkApi.Models.CryptoService.SignPackages;
 
 namespace RulinkApi.CryptoService;
 
@@ -26,8 +27,9 @@ public class CryptoServiceClient : ICryptoServiceClient
         Apikey = !string.IsNullOrEmpty(apikey) ? apikey : string.Empty;
     }
     
-    public void SetApikey(string apikey)
+    public void SetApikey(string? apikey)
     {
+        if (string.IsNullOrEmpty(apikey)) return;
         Apikey = apikey;
     }
 
@@ -102,5 +104,81 @@ public class CryptoServiceClient : ICryptoServiceClient
     public SignatureUpdateResponse ExcludeSigners(SignatureExcludeRequest signatureExcludeRequest, string? traceid)
     {
         return ExcludeSignersAsync(signatureExcludeRequest, traceid, new CancellationToken()).Result;
+    }
+
+    public async Task<SignPackagesResponse> GetSignPackagesAsync(string? traceid, CancellationToken cancellationToken)
+    {
+        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
+        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/packages"));
+        var headers = new Dictionary<string, string>
+        {
+            {"Authorization", $"Apikey {Apikey}"}
+        };
+        if (!string.IsNullOrEmpty(traceid))
+            headers.Add("traceid", traceid);
+        var jsonResponse = await Client.GetAsync(uri, headers, cancellationToken);
+        return SignPackagesResponse.FromJson(jsonResponse);
+    }
+
+    public SignPackagesResponse GetSignPackages(string? traceid)
+    {
+        return GetSignPackagesAsync(traceid, new CancellationToken()).Result;
+    }
+
+    public async Task<SignPackagesResponse> GetSignPackageAsync(string packageid, string? traceid, CancellationToken cancellationToken)
+    {
+        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
+        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, $"/packages/{packageid}"));
+        var headers = new Dictionary<string, string>
+        {
+            {"Authorization", $"Apikey {Apikey}"}
+        };
+        if (!string.IsNullOrEmpty(traceid))
+            headers.Add("traceid", traceid);
+        var jsonResponse = await Client.GetAsync(uri, headers, cancellationToken);
+        return SignPackagesResponse.FromJson(jsonResponse);
+    }
+
+    public SignPackagesResponse GetSignPackage(string packageid, string? traceid)
+    {
+        return GetSignPackageAsync(packageid, traceid, new CancellationToken()).Result;
+    }
+
+    public async Task<SignPackagesResponse> CreateSignPackageAsync(string? traceid, CancellationToken cancellationToken)
+    {
+        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
+        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, $"/packages/create"));
+        var headers = new Dictionary<string, string>
+        {
+            {"Authorization", $"Apikey {Apikey}"}
+        };
+        if (!string.IsNullOrEmpty(traceid))
+            headers.Add("traceid", traceid);
+        var jsonResponse = await Client.PostAsync(uri, null, headers, cancellationToken);
+        return SignPackagesResponse.FromJson(jsonResponse);
+    }
+
+    public SignPackagesResponse CreateSignPackage(string? traceid)
+    {
+        return CreateSignPackageAsync(traceid, new CancellationToken()).Result;
+    }
+
+    public async Task<GeneralResponse> DeleteSignPackageAsync(string packageid, string? traceid, CancellationToken cancellationToken)
+    {
+        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
+        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, $"/packages/{packageid}/remove"));
+        var headers = new Dictionary<string, string>
+        {
+            {"Authorization", $"Apikey {Apikey}"}
+        };
+        if (!string.IsNullOrEmpty(traceid))
+            headers.Add("traceid", traceid);
+        var jsonResponse = await Client.DeleteAsync(uri, headers, cancellationToken);
+        return SignPackagesResponse.FromJson(jsonResponse);
+    }
+
+    public GeneralResponse DeleteSignPackage(string packageid, string? traceid)
+    {
+        throw new NotImplementedException();
     }
 }
