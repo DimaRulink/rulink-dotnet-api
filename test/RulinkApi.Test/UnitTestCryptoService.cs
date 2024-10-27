@@ -10,7 +10,8 @@ public class UnitTestCryptoService
     [SetUp]
     public void Setup()
     {
-        _cryptoServiceClient = new CryptoServiceClient("https://rulink.io/api/v1/crypto", "your-api-key");
+        const string yourApiKey = "your-api-key";
+        _cryptoServiceClient = new CryptoServiceClient("https://rulink.io/api/v1/crypto", yourApiKey);
     }
 
     [Test]
