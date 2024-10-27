@@ -246,4 +246,20 @@ public static class Client
             return url;
         return $"{url.TrimEnd('/')}/{path.TrimStart('/')}";
     }
+    
+    public static Uri CreateUri(string baseUrl, string path)
+    {
+        var baseUri = new Uri(baseUrl, UriKind.Absolute);
+        return new Uri(baseUri, UrlCombine(baseUri.LocalPath, path));
+    }
+
+    public static Dictionary<string, string> CreateHeaders(string? apikey, string? traceid = null)
+    {
+        var headers = new Dictionary<string, string>();
+        if(!string.IsNullOrEmpty(apikey))
+            headers.Add("Authorization", $"Apikey {apikey}");
+        if (!string.IsNullOrEmpty(traceid))
+            headers.Add("traceid", traceid);
+        return headers;
+    }
 }

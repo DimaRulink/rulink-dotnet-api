@@ -23,7 +23,7 @@ public class SignatureExcludeRequest : SignatureRequest
     /// </summary>
     /// <param name="signatureFile"></param>
     /// <param name="certificateSNArray">Массив SN сертификатов для исключения</param>
-    public SignatureExcludeRequest(byte[] signatureFile, IEnumerable<string> certificateSNArray):base(signatureFile)
+    public SignatureExcludeRequest(byte[]? signatureFile, IEnumerable<string> certificateSNArray):base(signatureFile)
     {
         SerialNumberArray = certificateSNArray.ToArray();
     }

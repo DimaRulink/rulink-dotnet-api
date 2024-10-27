@@ -10,7 +10,7 @@ public class UnitTestCryptoService
     [SetUp]
     public void Setup()
     {
-        _cryptoServiceClient = new CryptoServiceClient("https://rulink.io/api/v2/crypto", "your-api-key");
+        _cryptoServiceClient = new CryptoServiceClient("https://rulink.io/api/v1/crypto", "your-api-key");
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class UnitTestCryptoService
             SerialNumberArray = ["01DA21C85D0D4EE00000000210EF0001"]
         };
         
-        var result = _cryptoServiceClient.ExcludeSigners(exludeSignerRequest, "test");
+        var result = _cryptoServiceClient.ExpulseSigners(exludeSignerRequest, "test");
         Assert.IsTrue(result.IsSuccess);
     }
 }

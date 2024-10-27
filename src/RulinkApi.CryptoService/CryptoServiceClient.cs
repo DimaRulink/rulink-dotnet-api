@@ -35,28 +35,16 @@ public class CryptoServiceClient : ICryptoServiceClient
 
     public async Task<GeneralResponse> Ping(CancellationToken cancellationToken)
     {
-        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        //var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/ping");
-        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/cms/ping"));
-        var headers = new Dictionary<string, string>
-        {
-            {"Authorization", $"Apikey {Apikey}"}
-        };
+        var uri = Client.CreateUri(BaseUrl, "/cms/ping");
+        var headers = Client.CreateHeaders(Apikey);
         var jsonResponse = await Client.GetAsync(uri, headers, cancellationToken);
         return GeneralResponse.FromJson(jsonResponse);
     }
 
     public async Task<SignatureVerificationResponse> VerifySignatureAsync(SignatureVerificationRequest verificationRequest, string? traceid, CancellationToken cancellationToken)
     {
-        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        //var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/signature/validation");
-        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/cms/signature/validation"));
-        var headers = new Dictionary<string, string>
-        {
-            {"Authorization", $"Apikey {Apikey}"}
-        };
-        if (!string.IsNullOrEmpty(traceid))
-            headers.Add("traceid", traceid);
+        var uri = Client.CreateUri(BaseUrl, "/cms/signatures/validation");
+        var headers = Client.CreateHeaders(Apikey, traceid);
         var jsonResponse = await Client.PostAsync(uri, verificationRequest.ToString(), headers, cancellationToken);
         return SignatureVerificationResponse.FromJson(jsonResponse);
     }
@@ -68,15 +56,8 @@ public class CryptoServiceClient : ICryptoServiceClient
 
     public async Task<SignatureUpdateResponse> MergeSignaturesAsync(SignatureMergeRequest signatureUpdateRequest, string? traceid, CancellationToken cancellationToken)
     {
-        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        //var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/signature/merge");
-        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/cms/signature/merge"));
-        var headers = new Dictionary<string, string>
-        {
-            {"Authorization", $"Apikey {Apikey}"}
-        };
-        if (!string.IsNullOrEmpty(traceid))
-            headers.Add("traceid", traceid);
+        var uri = Client.CreateUri(BaseUrl, "/cms/signatures/merger");
+        var headers = Client.CreateHeaders(Apikey, traceid);
         var jsonResponse = await Client.PostAsync(uri, signatureUpdateRequest.ToString(), headers, cancellationToken);
         return SignatureUpdateResponse.FromJson(jsonResponse);
     }
@@ -86,24 +67,17 @@ public class CryptoServiceClient : ICryptoServiceClient
         return MergeSignaturesAsync(signatureUpdateRequest, traceid, new CancellationToken()).Result;
     }
 
-    public async Task<SignatureUpdateResponse> ExcludeSignersAsync(SignatureExcludeRequest signatureExcludeRequest, string? traceid, CancellationToken cancellationToken)
+    public async Task<SignatureUpdateResponse> ExpulseSignersAsync(SignatureExcludeRequest signatureExcludeRequest, string? traceid, CancellationToken cancellationToken)
     {
-        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        //var uri = new Uri(baseUri, $"{baseUri.LocalPath}/cms/signature/exclude");
-        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/cms/signature/exclude"));
-        var headers = new Dictionary<string, string>
-        {
-            {"Authorization", $"Apikey {Apikey}"}
-        };
-        if (!string.IsNullOrEmpty(traceid))
-            headers.Add("traceid", traceid);
+        var uri = Client.CreateUri(BaseUrl, "/cms/signatures/expulsion");
+        var headers = Client.CreateHeaders(Apikey, traceid);
         var jsonResponse = await Client.PostAsync(uri, signatureExcludeRequest.ToString(), headers, cancellationToken);
         return SignatureUpdateResponse.FromJson(jsonResponse);
     }
 
-    public SignatureUpdateResponse ExcludeSigners(SignatureExcludeRequest signatureExcludeRequest, string? traceid)
+    public SignatureUpdateResponse ExpulseSigners(SignatureExcludeRequest signatureExcludeRequest, string? traceid)
     {
-        return ExcludeSignersAsync(signatureExcludeRequest, traceid, new CancellationToken()).Result;
+        return ExpulseSignersAsync(signatureExcludeRequest, traceid, new CancellationToken()).Result;
     }
 
     public async Task<SignPackagesResponse> GetSignPackagesAsync(string? traceid, CancellationToken cancellationToken)
@@ -165,8 +139,7 @@ public class CryptoServiceClient : ICryptoServiceClient
 
     public async Task<GeneralResponse> DeleteSignPackageAsync(string packageid, string? traceid, CancellationToken cancellationToken)
     {
-        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, $"/packages/{packageid}/remove"));
+        var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}/remove");
         var headers = new Dictionary<string, string>
         {
             {"Authorization", $"Apikey {Apikey}"}
@@ -179,6 +152,6 @@ public class CryptoServiceClient : ICryptoServiceClient
 
     public GeneralResponse DeleteSignPackage(string packageid, string? traceid)
     {
-        throw new NotImplementedException();
+        return DeleteSignPackageAsync(packageid, traceid, new CancellationToken()).Result;
     }
 }

@@ -64,7 +64,7 @@ public interface ICryptoServiceClient
     /// <param name="traceid"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<SignatureUpdateResponse> ExcludeSignersAsync(SignatureExcludeRequest signatureExcludeRequest, string? traceid, CancellationToken cancellationToken);
+    public Task<SignatureUpdateResponse> ExpulseSignersAsync(SignatureExcludeRequest signatureExcludeRequest, string? traceid, CancellationToken cancellationToken);
     
     /// <summary>
     /// Исключение подписантов из контейнера подписи
@@ -72,7 +72,7 @@ public interface ICryptoServiceClient
     /// <param name="signatureExcludeRequest">Структура данных: файл подписи и массив Certificate SerialNumber для исключения</param>
     /// <param name="traceid"></param>
     /// <returns></returns>
-    public SignatureUpdateResponse ExcludeSigners(SignatureExcludeRequest signatureExcludeRequest, string? traceid);
+    public SignatureUpdateResponse ExpulseSigners(SignatureExcludeRequest signatureExcludeRequest, string? traceid);
     
     /// <summary>
     /// Получение списка пакетов подписания
