@@ -82,14 +82,8 @@ public class CryptoServiceClient : ICryptoServiceClient
 
     public async Task<SignPackagesResponse> GetSignPackagesAsync(string? traceid, CancellationToken cancellationToken)
     {
-        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, "/packages"));
-        var headers = new Dictionary<string, string>
-        {
-            {"Authorization", $"Apikey {Apikey}"}
-        };
-        if (!string.IsNullOrEmpty(traceid))
-            headers.Add("traceid", traceid);
+        var uri = Client.CreateUri(BaseUrl, "/packages");
+        var headers = Client.CreateHeaders(Apikey, traceid);
         var jsonResponse = await Client.GetAsync(uri, headers, cancellationToken);
         return SignPackagesResponse.FromJson(jsonResponse);
     }
@@ -101,14 +95,8 @@ public class CryptoServiceClient : ICryptoServiceClient
 
     public async Task<SignPackagesResponse> GetSignPackageAsync(string packageid, string? traceid, CancellationToken cancellationToken)
     {
-        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, $"/packages/{packageid}"));
-        var headers = new Dictionary<string, string>
-        {
-            {"Authorization", $"Apikey {Apikey}"}
-        };
-        if (!string.IsNullOrEmpty(traceid))
-            headers.Add("traceid", traceid);
+        var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}");
+        var headers = Client.CreateHeaders(Apikey, traceid);
         var jsonResponse = await Client.GetAsync(uri, headers, cancellationToken);
         return SignPackagesResponse.FromJson(jsonResponse);
     }
@@ -120,14 +108,8 @@ public class CryptoServiceClient : ICryptoServiceClient
 
     public async Task<SignPackagesResponse> CreateSignPackageAsync(string? traceid, CancellationToken cancellationToken)
     {
-        var baseUri = new Uri(BaseUrl, UriKind.Absolute);
-        var uri = new Uri(baseUri, Client.UrlCombine(baseUri.LocalPath, $"/packages/create"));
-        var headers = new Dictionary<string, string>
-        {
-            {"Authorization", $"Apikey {Apikey}"}
-        };
-        if (!string.IsNullOrEmpty(traceid))
-            headers.Add("traceid", traceid);
+        var uri = Client.CreateUri(BaseUrl, $"/packages");
+        var headers = Client.CreateHeaders(Apikey, traceid);
         var jsonResponse = await Client.PostAsync(uri, null, headers, cancellationToken);
         return SignPackagesResponse.FromJson(jsonResponse);
     }
@@ -139,13 +121,8 @@ public class CryptoServiceClient : ICryptoServiceClient
 
     public async Task<GeneralResponse> DeleteSignPackageAsync(string packageid, string? traceid, CancellationToken cancellationToken)
     {
-        var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}/remove");
-        var headers = new Dictionary<string, string>
-        {
-            {"Authorization", $"Apikey {Apikey}"}
-        };
-        if (!string.IsNullOrEmpty(traceid))
-            headers.Add("traceid", traceid);
+        var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}");
+        var headers = Client.CreateHeaders(Apikey, traceid);
         var jsonResponse = await Client.DeleteAsync(uri, headers, cancellationToken);
         return SignPackagesResponse.FromJson(jsonResponse);
     }
@@ -153,5 +130,19 @@ public class CryptoServiceClient : ICryptoServiceClient
     public GeneralResponse DeleteSignPackage(string packageid, string? traceid)
     {
         return DeleteSignPackageAsync(packageid, traceid, new CancellationToken()).Result;
+    }
+    
+    public async Task<GeneralResponse> UpdateSignPackageAsync(string packageid, string? description, string? traceid, CancellationToken cancellationToken)
+    {
+        var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}");
+        var headers = Client.CreateHeaders(Apikey, traceid);
+        var json = "{\"description\":\"" + description + "\"}";
+        var jsonResponse = await Client.PatchAsync(uri, json, headers, cancellationToken);
+        return SignPackagesResponse.FromJson(jsonResponse);
+    }
+    
+    public GeneralResponse UpdateSignPackage(string packageid, string? description, string? traceid)
+    {
+        return UpdateSignPackageAsync(packageid, description, traceid, new CancellationToken()).Result;
     }
 }

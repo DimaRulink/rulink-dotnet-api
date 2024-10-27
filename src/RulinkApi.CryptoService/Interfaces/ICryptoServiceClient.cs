@@ -139,4 +139,23 @@ public interface ICryptoServiceClient
     /// <param name="traceid"></param>
     /// <returns></returns>
     public GeneralResponse DeleteSignPackage(string packageid, string? traceid);
+    
+    /// <summary>
+    /// Обновление поля комментарий пакета подписания
+    /// </summary>
+    /// <param name="packageid"></param>
+    /// <param name="description"></param>
+    /// <param name="traceid"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<GeneralResponse> UpdateSignPackageAsync(string packageid, string? description, string? traceid, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Обновление поля комментарий пакета подписания
+    /// </summary>
+    /// <param name="packageid"></param>
+    /// <param name="description"></param>
+    /// <param name="traceid"></param>
+    /// <returns></returns>
+    public GeneralResponse UpdateSignPackage(string packageid, string? description, string? traceid);
 }

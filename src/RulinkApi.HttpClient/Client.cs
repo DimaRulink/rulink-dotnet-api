@@ -71,33 +71,6 @@ public static class Client
         return await response.Content.ReadAsStringAsync(cancellationToken);
     }
     
-    // /// <summary>
-    // /// Отправка PUT запроса 
-    // /// </summary>
-    // /// <param name="url"></param>
-    // /// <param name="apikey"></param>
-    // /// <param name="content"></param>
-    // /// <param name="cancellationToken"></param>
-    // /// <returns></returns>
-    // public static async Task<string> PutAsync(Uri url, string apikey, string? content, CancellationToken cancellationToken)
-    // {
-    //     HttpClientHandler clientHandler = new HttpClientHandler();
-    //     clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
-    //
-    //     using var client = new System.Net.Http.HttpClient(clientHandler);
-    //     client.DefaultRequestHeaders.Add("Authorization", $"Apikey {apikey}");
-    //     HttpResponseMessage response;
-    //     if (!string.IsNullOrEmpty(content))
-    //     {
-    //         var strcontent = new StringContent(content, Encoding.UTF8, "application/json");
-    //         response = await client.PutAsync(url, strcontent, cancellationToken);
-    //     }
-    //     else
-    //         response = await client.PutAsync(url, null, cancellationToken);
-    //     return await response.Content.ReadAsStringAsync(cancellationToken);
-    // }
-    
-    
     /// <summary>
     /// Запрос PUT API
     /// </summary>
@@ -147,7 +120,34 @@ public static class Client
         return await response.Content.ReadAsStringAsync(cancellationToken);
     }
     
-    
+    /// <summary>
+    /// Запрос PATCH API
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="content"></param>
+    /// <param name="headers"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<string> PatchAsync(Uri url, string? content, IDictionary<string,string> headers, CancellationToken cancellationToken)
+    {
+        HttpClientHandler clientHandler = new HttpClientHandler();
+        clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+        using var client = new System.Net.Http.HttpClient(clientHandler);
+        foreach (var onekey in headers.Keys)
+        {
+            client.DefaultRequestHeaders.Add(onekey, headers[onekey]);
+        }
+        
+        HttpResponseMessage response;
+        if (!string.IsNullOrEmpty(content))
+        {
+            var strcontent = new StringContent(content, Encoding.UTF8, "application/json");
+            response = await client.PatchAsync(url, strcontent, cancellationToken);
+        }
+        else
+            response = await client.PatchAsync(url, null, cancellationToken);
+        return await response.Content.ReadAsStringAsync(cancellationToken);
+    }
     
     
     
