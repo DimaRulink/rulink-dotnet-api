@@ -117,7 +117,7 @@ public static class Client
             client.DefaultRequestHeaders.Add(onekey, headers[onekey]);
         }
         var response = await client.DeleteAsync(url, cancellationToken);
-        return await response.Content.ReadAsStringAsync(cancellationToken);
+        return !response.IsSuccessStatusCode ? "{ \"IsSuccess\": false }" : "{ \"IsSuccess\": true }";
     }
     
     /// <summary>
@@ -149,10 +149,6 @@ public static class Client
         return await response.Content.ReadAsStringAsync(cancellationToken);
     }
     
-    
-    
-    
-    
     /// <summary>
     /// Загрузка файла через API
     /// </summary>
@@ -180,48 +176,6 @@ public static class Client
         }
         throw new ArgumentNullException($"Request with URL={url} Exception: File content is empty");
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // /// <summary>
-    // /// Загрузка файла через API
-    // /// </summary>
-    // /// <param name="url"></param>
-    // /// <param name="apikey"></param>
-    // /// <param name="filename"></param>
-    // /// <param name="fileData"></param>
-    // /// <param name="cancellationToken"></param>
-    // /// <returns></returns>
-    // public static async Task<string> UploadFileAsync(Uri url, string apikey, byte[] fileData, CancellationToken cancellationToken)
-    // {
-    //     HttpClientHandler clientHandler = new HttpClientHandler();
-    //     clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
-    //
-    //     using var client = new System.Net.Http.HttpClient(clientHandler);
-    //     client.DefaultRequestHeaders.Add("Authorization", $"Apikey {apikey}");
-    //     if (fileData.Any())
-    //     {
-    //         var multipartContent = new MultipartFormDataContent($"Upload----{DateTime.Now.Ticks}");
-    //         multipartContent.Add(new StreamContent(new MemoryStream(fileData)), "file1", DateTime.Now.Ticks.ToString());
-    //         HttpResponseMessage response = await client.PostAsync(url, multipartContent, cancellationToken);
-    //         return await response.Content.ReadAsStringAsync(cancellationToken);
-    //     }
-    //     throw new ArgumentNullException($"Request with URL={url} Exception: File content is empty");
-
     
     /// <summary>
     /// Запрос GET с ответом в виде byte[]. Метод для скачивания контета с внешних сайтов

@@ -136,7 +136,7 @@ public class CryptoServiceClient : ICryptoServiceClient
     {
         var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}");
         var headers = Client.CreateHeaders(Apikey, traceid);
-        var json = "{\"description\":\"" + description + "\"}";
+        var json = $"{{\"description\":\"{description}\"}}";
         var jsonResponse = await Client.PatchAsync(uri, json, headers, cancellationToken);
         return SignPackagesResponse.FromJson(jsonResponse);
     }
@@ -144,5 +144,59 @@ public class CryptoServiceClient : ICryptoServiceClient
     public GeneralResponse UpdateSignPackage(string packageid, string? description, string? traceid)
     {
         return UpdateSignPackageAsync(packageid, description, traceid, new CancellationToken()).Result;
+    }
+
+    public async Task<AttachedFileResponse> AddFileToSignPackageAsync(string packageid, string filename, string? traceid, CancellationToken cancellationToken)
+    {
+        var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}/files");
+        var headers = Client.CreateHeaders(Apikey, traceid);
+        var json = $"{{\"filename\":\"{filename}\"}}";
+        var jsonResponse = await Client.PostAsync(uri, json, headers, cancellationToken);
+        return AttachedFileResponse.FromJson(jsonResponse);
+    }
+
+    public AttachedFileResponse AddFileToSignPackage(string packageid, string filename, string? traceid)
+    {
+        return AddFileToSignPackageAsync(packageid, filename, traceid, new CancellationToken()).Result;
+    }
+
+    public async Task<GeneralResponse> UploadFileAsync(string? contentUrl, byte[] content, string? traceid, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(contentUrl))
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Message = "ContentUrl is empty",
+                TraceId = traceid ?? string.Empty
+            };
+        var uri = Client.CreateUri(BaseUrl, contentUrl);
+        var headers = Client.CreateHeaders(Apikey, traceid);
+        var jsonResponse = await Client.UploadFileAsync(uri, content, headers, cancellationToken);
+        return GeneralResponse.FromJson(jsonResponse);
+    }
+
+    public GeneralResponse UploadFile(string? contentUrl, byte[] content, string? traceid)
+    {
+        return UploadFileAsync(contentUrl, content, traceid, new CancellationToken()).Result;
+    }
+
+    public async Task<GeneralResponse> RemoveFileAsync(string? packageid, string? fileid, string? traceid, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(packageid) || string.IsNullOrEmpty(fileid))
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Message = "ContentUrl is empty",
+                TraceId = traceid ?? string.Empty
+            };
+        var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}/files/{fileid}");
+        var headers = Client.CreateHeaders(Apikey, traceid);
+        var jsonResponse = await Client.DeleteAsync(uri, headers, cancellationToken);
+        return AttachedFileResponse.FromJson(jsonResponse);
+    }
+
+    public GeneralResponse RemoveFile(string? packageid, string? fileid, string? traceid)
+    {
+        return RemoveFileAsync(packageid, fileid, traceid, new CancellationToken()).Result;
     }
 }

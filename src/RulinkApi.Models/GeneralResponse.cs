@@ -2,7 +2,7 @@
 
 namespace RulinkApi.Models;
 
-public class GeneralResponse(bool isSuccess, string message, string traceId)
+public class GeneralResponse(bool isSuccess, string? message, string? traceId)
 {
     /// <summary>
     /// Общий результат выполнения запроса
@@ -12,14 +12,14 @@ public class GeneralResponse(bool isSuccess, string message, string traceId)
     /// <summary>
     /// Сообщение о результате выполнения запроса/Ошибка выполнения
     /// </summary>
-    public string Message { get; set; } = message;
+    public string Message { get; set; } = message ?? string.Empty;
 
     /// <summary>
     /// TraceId запроса
     /// </summary>
-    public string TraceId { get; set; } = traceId;
+    public string TraceId { get; set; } = traceId ?? string.Empty;
 
-    public GeneralResponse(): this(false, string.Empty, string.Empty)
+    public GeneralResponse(): this(false, null, null)
     {
     }
 

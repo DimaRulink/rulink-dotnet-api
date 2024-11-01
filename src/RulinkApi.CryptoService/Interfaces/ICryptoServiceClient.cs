@@ -158,4 +158,61 @@ public interface ICryptoServiceClient
     /// <param name="traceid"></param>
     /// <returns></returns>
     public GeneralResponse UpdateSignPackage(string packageid, string? description, string? traceid);
+    
+    /// <summary>
+    /// Добавление файла в пакет подписания
+    /// </summary>
+    /// <param name="packageid"></param>
+    /// <param name="filename"></param>
+    /// <param name="traceid"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<AttachedFileResponse> AddFileToSignPackageAsync(string packageid, string filename, string? traceid, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Добавление файла в пакет подписания
+    /// </summary>
+    /// <param name="packageid"></param>
+    /// <param name="filename"></param>
+    /// <param name="traceid"></param>
+    /// <returns></returns>
+    public AttachedFileResponse AddFileToSignPackage(string packageid, string filename, string? traceid);
+
+    /// <summary>
+    /// Загрузка контента файла
+    /// </summary>
+    /// <param name="contentUrl"></param>
+    /// <param name="content"></param>
+    /// <param name="traceid"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<GeneralResponse> UploadFileAsync(string? contentUrl, byte[] content, string? traceid, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Загрузка контента файла
+    /// </summary>
+    /// <param name="contentUrl"></param>
+    /// <param name="content"></param>
+    /// <param name="traceid"></param>
+    /// <returns></returns>
+    public GeneralResponse UploadFile(string? contentUrl, byte[] content, string? traceid);
+    
+    /// <summary>
+    /// Удаление файла из пакета подписания
+    /// </summary>
+    /// <param name="packageid"></param>
+    /// <param name="fileid"></param>
+    /// <param name="traceid"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<GeneralResponse> RemoveFileAsync(string? packageid, string? fileid, string? traceid, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Удаление файла из пакета подписания
+    /// </summary>
+    /// <param name="packageid"></param>
+    /// <param name="fileid"></param>
+    /// <param name="traceid"></param>
+    /// <returns></returns>
+    public GeneralResponse RemoveFile(string? packageid, string? fileid, string? traceid);
 }
