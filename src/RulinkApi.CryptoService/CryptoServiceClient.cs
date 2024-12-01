@@ -2,6 +2,7 @@
 using RulinkApi.CryptoService.Interfaces;
 using RulinkApi.Models;
 using RulinkApi.Models.CryptoService;
+using RulinkApi.Models.CryptoService.Signers;
 using RulinkApi.Models.CryptoService.SignPackages;
 
 namespace RulinkApi.CryptoService;
@@ -10,7 +11,7 @@ namespace RulinkApi.CryptoService;
 /// Клиент для работы с сервисом электронной подписи
 /// Swagger: https://rulink.io/api/v1/crypto/swagger/index.html
 /// </summary>
-public class CryptoServiceClient : ICryptoServiceClient
+public partial class CryptoServiceClient : ICryptoServiceClient
 {
     private string BaseUrl { get; }
     public string Apikey { get; set; }
@@ -160,25 +161,7 @@ public class CryptoServiceClient : ICryptoServiceClient
         return AddFileToSignPackageAsync(packageid, filename, traceid, new CancellationToken()).Result;
     }
 
-    public async Task<GeneralResponse> UploadFileAsync(string? contentUrl, byte[] content, string? traceid, CancellationToken cancellationToken)
-    {
-        if (string.IsNullOrEmpty(contentUrl))
-            return new GeneralResponse()
-            {
-                IsSuccess = false,
-                Message = "ContentUrl is empty",
-                TraceId = traceid ?? string.Empty
-            };
-        var uri = Client.CreateUri(BaseUrl, contentUrl);
-        var headers = Client.CreateHeaders(Apikey, traceid);
-        var jsonResponse = await Client.UploadFileAsync(uri, content, headers, cancellationToken);
-        return GeneralResponse.FromJson(jsonResponse);
-    }
 
-    public GeneralResponse UploadFile(string? contentUrl, byte[] content, string? traceid)
-    {
-        return UploadFileAsync(contentUrl, content, traceid, new CancellationToken()).Result;
-    }
 
     public async Task<GeneralResponse> RemoveFileAsync(string? packageid, string? fileid, string? traceid, CancellationToken cancellationToken)
     {
@@ -191,12 +174,35 @@ public class CryptoServiceClient : ICryptoServiceClient
             };
         var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}/files/{fileid}");
         var headers = Client.CreateHeaders(Apikey, traceid);
-        var jsonResponse = await Client.DeleteAsync(uri, headers, cancellationToken);
-        return AttachedFileResponse.FromJson(jsonResponse);
+        await Client.DeleteAsync(uri, headers, cancellationToken);
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Message = "File removed",
+            TraceId = traceid ?? string.Empty
+        };
+        //return GeneralResponse.FromJson(jsonResponse);
     }
 
     public GeneralResponse RemoveFile(string? packageid, string? fileid, string? traceid)
     {
         return RemoveFileAsync(packageid, fileid, traceid, new CancellationToken()).Result;
+    }
+
+    public async Task<AssignedFilesResponse> GetAssignedFilesAsync(string? packageid, string? signerid, string? traceid, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(packageid) || string.IsNullOrEmpty(signerid))
+            return new AssignedFilesResponse()
+            {
+                IsSuccess = false,
+                Message = "Не указан идентификатор пакета или подписанта",
+                TraceId = traceid ?? string.Empty,
+                Files = [],
+                Signer = null
+            };
+        var uri = Client.CreateUri(BaseUrl, $"/packages/{packageid}/signers/{signerid}");
+        var headers = Client.CreateHeaders(Apikey, traceid);
+        var jsonResponse = await Client.GetAsync(uri, headers, cancellationToken);
+        return AssignedFilesResponse.FromJson(jsonResponse);
     }
 }

@@ -30,6 +30,8 @@ public class GeneralResponse(bool isSuccess, string? message, string? traceId)
     
     public static GeneralResponse FromJson(string json)
     {
+        if (string.IsNullOrEmpty(json))
+            return new GeneralResponse(false, "json empty", string.Empty);
         return JsonSerializer.Deserialize<GeneralResponse>(json, new JsonSerializerOptions {PropertyNameCaseInsensitive = true}) ??
                new GeneralResponse(false, "Ошибка десериализации", string.Empty);
     }

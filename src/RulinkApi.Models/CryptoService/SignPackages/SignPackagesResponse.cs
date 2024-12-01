@@ -6,11 +6,11 @@ public class SignPackagesResponse : GeneralResponse
 {
     public SignPackage[]? Packages { get; set; }
     
-    public SignPackagesResponse():base(false, "", "")
+    public SignPackagesResponse():base(false, null, null)
     {
         Packages = [];
     }
-    public SignPackagesResponse(bool success, string message, string error, SignPackage[]? packages):base(success, message, error)
+    public SignPackagesResponse(bool success, string? message, string? traceid, SignPackage[]? packages):base(success, message, traceid)
     {
         Packages = packages ?? [];
     }

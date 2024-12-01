@@ -24,23 +24,23 @@ public static class Client
         return await response.Content.ReadAsStringAsync(cancellationToken);
     }
     
-    /// <summary>
-    /// Запрос GET с ответом в виде byte[]
-    /// </summary>
-    /// <param name="url"></param>
-    /// <param name="apikey"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public static async Task<byte[]> DownloadAsync(Uri url, string apikey, CancellationToken cancellationToken)
-    {
-        HttpClientHandler clientHandler = new HttpClientHandler();
-        clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
-
-        using var client = new System.Net.Http.HttpClient(clientHandler);
-        client.DefaultRequestHeaders.Add("Authorization", $"Apikey {apikey}");
-        var response = await client.GetAsync(url, cancellationToken);
-        return await response.Content.ReadAsByteArrayAsync(cancellationToken);
-    }
+    // /// <summary>
+    // /// Запрос GET с ответом в виде byte[]
+    // /// </summary>
+    // /// <param name="url"></param>
+    // /// <param name="apikey"></param>
+    // /// <param name="cancellationToken"></param>
+    // /// <returns></returns>
+    // public static async Task<byte[]> DownloadAsync(Uri url, string apikey, CancellationToken cancellationToken)
+    // {
+    //     HttpClientHandler clientHandler = new HttpClientHandler();
+    //     clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+    //
+    //     using var client = new System.Net.Http.HttpClient(clientHandler);
+    //     client.DefaultRequestHeaders.Add("Authorization", $"Apikey {apikey}");
+    //     var response = await client.GetAsync(url, cancellationToken);
+    //     return await response.Content.ReadAsByteArrayAsync(cancellationToken);
+    // }
 
     /// <summary>
     /// Запрос POST к API
@@ -175,6 +175,26 @@ public static class Client
             return await response.Content.ReadAsStringAsync(cancellationToken);
         }
         throw new ArgumentNullException($"Request with URL={url} Exception: File content is empty");
+    }
+    
+    /// <summary>
+    /// Скачивание файла через API
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="headers"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<byte[]> DownloadAsync(Uri url, Dictionary<string,string> headers, CancellationToken cancellationToken)
+    {
+        HttpClientHandler clientHandler = new HttpClientHandler();
+        clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+        using var client = new System.Net.Http.HttpClient(clientHandler);
+        foreach (var onekey in headers.Keys)
+        {
+            client.DefaultRequestHeaders.Add(onekey, headers[onekey]);
+        }
+        var response = await client.GetAsync(url, cancellationToken);
+        return await response.Content.ReadAsByteArrayAsync(cancellationToken);
     }
     
     /// <summary>
